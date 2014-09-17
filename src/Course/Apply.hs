@@ -29,7 +29,7 @@ instance Apply Id where
     Id (a -> b)
     -> Id a
     -> Id b
-  (<*>) f = flip bindId f . flip mapId
+  (<*>) f = flip bindId f . flip (<$>)
 
 -- | Implement @Apply@ instance for @List@.
 --
@@ -40,7 +40,7 @@ instance Apply List where
     List (a -> b)
     -> List a
     -> List b
-  (<*>) f = flip flatMap f . flip map
+  (<*>) f = flip flatMap f . flip (<$>)
 
 -- | Implement @Apply@ instance for @Optional@.
 --
@@ -57,7 +57,7 @@ instance Apply Optional where
     Optional (a -> b)
     -> Optional a
     -> Optional b
-  (<*>) f = flip bindOptional f . flip mapOptional
+  (<*>) f = flip bindOptional f . flip (<$>)
 
 -- | Implement @Apply@ instance for reader.
 --
@@ -80,8 +80,7 @@ instance Apply ((->) t) where
     ((->) t (a -> b))
     -> ((->) t a)
     -> ((->) t b)
-  (<*>) =
-    error "todo"
+  (<*>) f g = \t -> f t (g t)
 
 -- | Apply a binary function in the environment.
 --
@@ -196,8 +195,7 @@ lift4 f a b c d = f <$> a <*> b <*> c <*> d
   f a
   -> f b
   -> f b
-(*>) =
-  error "todo"
+(*>) a b = (flip const) <$> a <*> b
 
 -- | Sequence, discarding the value of the second argument.
 -- Pronounced, left apply.
@@ -222,8 +220,7 @@ lift4 f a b c d = f <$> a <*> b <*> c <*> d
   f b
   -> f a
   -> f b
-(<*) =
-  error "todo"
+(<*) b a = const <$> b <*> a
 
 -----------------------
 -- SUPPORT LIBRARIES --
