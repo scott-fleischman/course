@@ -72,8 +72,7 @@ headOr ::
   a
   -> List a
   -> a
-headOr x Nil = x
-headOr _ (y :. _) = y
+headOr = foldRight const
 
 -- | The product of the elements of a list.
 --
@@ -191,7 +190,7 @@ flatMap ::
   (a -> List b)
   -> List a
   -> List b
-flatMap f = foldRight ((++) . f) Nil
+flatMap f = flatten . map f
 
 -- | Flatten a list of lists to a list (again).
 -- HOWEVER, this time use the /flatMap/ function that you just wrote.
