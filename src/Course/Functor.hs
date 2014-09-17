@@ -106,7 +106,7 @@ void ::
   Functor f =>
   f a
   -> f ()
-void = (<$>) (const ())
+void = (() <$)
 
 -----------------------
 -- SUPPORT LIBRARIES --
